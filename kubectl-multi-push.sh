@@ -4,8 +4,8 @@
 ## author: Piotr Stawarski <piotr.stawarski@zerodowntime.pl>
 ##
 
-if [ $# -lt 1 ]; then
-  >&2 echo "Usage: ${0##*/} COMMAND [ARG1] [ARG2] ... [ARGN]"
+if [ $# -lt 2 ]; then
+  >&2 echo "Usage: ${0##*/} <file-spec-src> <file-spec-dest>"
   exit 1
 fi
 
@@ -22,7 +22,11 @@ if [ -z ${KUBECTL_CONTAINER+ok} ]; then
   # exit 1
 fi
 
+SRC_FILE="$1"
+DEST_FILE="$2"
+shift 2
+
 for POD_NAME in $(kubectl get pods --namespace "$KUBECTL_NAMESPACE" --selector "$KUBECTL_SELECTOR" --output=name); do
   echo "## ${POD_NAME#pod/}"
-  kubectl exec --stdin --namespace "$KUBECTL_NAMESPACE" "${POD_NAME#pod/}" --container "$KUBECTL_CONTAINER" -- "$@" || exit 2
+  kubectl cp "$SRC_FILE" "$KUBECTL_NAMESPACE/${POD_NAME#pod/}:$DEST_FILE" --no-preserve || exit 2
 done

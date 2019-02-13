@@ -13,6 +13,7 @@ RUN if [ "$KUBECTL_VERSION" = "latest" ]; then \
     chmod +x /usr/local/bin/kubectl
 
 COPY kubectl-multi-exec.sh /usr/local/bin/kubectl-multi-exec
+COPY kubectl-multi-push.sh /usr/local/bin/kubectl-multi-push
 
 ENTRYPOINT ["/usr/local/bin/kubectl"]
 CMD ["help"]
