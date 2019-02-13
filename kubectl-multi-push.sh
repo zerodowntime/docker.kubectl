@@ -28,5 +28,5 @@ shift 2
 
 for POD_NAME in $(kubectl get pods --namespace "$KUBECTL_NAMESPACE" --selector "$KUBECTL_SELECTOR" --output=name); do
   echo "## ${POD_NAME#pod/}"
-  kubectl cp "$SRC_FILE" "$KUBECTL_NAMESPACE/${POD_NAME#pod/}:$DEST_FILE" --no-preserve || exit 2
+  kubectl cp "$SRC_FILE" "$KUBECTL_NAMESPACE/${POD_NAME#pod/}:$DEST_FILE" --container "$KUBECTL_CONTAINER" --no-preserve || exit 2
 done
