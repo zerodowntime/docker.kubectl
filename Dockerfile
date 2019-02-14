@@ -12,8 +12,5 @@ RUN if [ "$KUBECTL_VERSION" = "latest" ]; then \
     curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl && \
     chmod +x /usr/local/bin/kubectl
 
-COPY kubectl-multi-exec.sh /usr/local/bin/kubectl-multi-exec
-COPY kubectl-multi-push.sh /usr/local/bin/kubectl-multi-push
-
 ENTRYPOINT ["/usr/local/bin/kubectl"]
 CMD ["help"]
