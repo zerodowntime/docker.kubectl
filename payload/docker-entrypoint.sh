@@ -6,19 +6,19 @@
 
 if [ $# -lt 1 ]; then
   >&2 echo "Usage: ${0##*/} payload [ARG1] [ARG2] ... [ARGN]"
-  >&2 echo "Usage: ${0##*/} payload-dir payload-bin [ARG1] [ARG2] ... [ARGN] #TODO"
+  # >&2 echo "Usage: ${0##*/} payload-dir payload-bin [ARG1] [ARG2] ... [ARGN] #TODO"
   exit 1
 fi
 
-if [ -z ${KUBECTL_NAMESPACE+ok} ]; then
+if [ -z ${KUBECTL_NAMESPACE} ]; then
   >&2 echo "KUBECTL_NAMESPACE is not defined!"
   exit 1
 fi
-if [ -z ${KUBECTL_SELECTOR+ok} ]; then
+if [ -z ${KUBECTL_SELECTOR} ]; then
   >&2 echo "KUBECTL_SELECTOR is not defined!"
   exit 1
 fi
-if [ -z ${KUBECTL_CONTAINER+ok} ]; then
+if [ -z ${KUBECTL_CONTAINER} ]; then
   >&2 echo "KUBECTL_CONTAINER is not defined! The first container in the pod will be chosen."
   # exit 1
 fi
