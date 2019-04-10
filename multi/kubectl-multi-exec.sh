@@ -22,7 +22,15 @@ if [ -z ${KUBECTL_CONTAINER+ok} ]; then
   # exit 1
 fi
 
-for POD_NAME in $(kubectl get pods --namespace "$KUBECTL_NAMESPACE" --selector "$KUBECTL_SELECTOR" --output=name); do
-  echo "## ${POD_NAME#pod/}"
-  kubectl exec --stdin --namespace "$KUBECTL_NAMESPACE" "${POD_NAME#pod/}" --container "$KUBECTL_CONTAINER" -- "$@" || exit 2
+for POD_NAME in $(kubectl get pods --namespace "$KUBECTL_NAMESPACE" --selector "$KUBECTL_SELECTOR" -o=custom-columns=NAME:.metadata.name --no-headers | sort -V); do
+  if [ -n "$KUBECTL_PAYLOAD_PARALLEL" ]; then
+    kubectl exec --stdin --namespace "$KUBECTL_NAMESPACE" "$POD_NAME" --container "$KUBECTL_CONTAINER" -- "$@" 2>&1 | awk -v prefix="$POD_NAME:" '{ print prefix, $0 }' &
+  else
+    echo "## $POD_NAME ##"
+    kubectl exec --stdin --namespace "$KUBECTL_NAMESPACE" "$POD_NAME" --container "$KUBECTL_CONTAINER" -- "$@" || exit 2
+  fi
 done
+
+wait
+
+echo "#DONE!"
