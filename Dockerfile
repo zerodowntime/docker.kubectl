@@ -6,6 +6,9 @@ ARG BASE_IMAGE="centos:7"
 
 FROM $BASE_IMAGE
 
+RUN curl -s -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -o /usr/local/bin/jq && \
+    chmod +x /usr/local/bin/jq
+
 ARG KUBECTL_VERSION="latest"
 
 RUN if [ "$KUBECTL_VERSION" = "latest" ]; then \
