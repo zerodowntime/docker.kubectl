@@ -2,7 +2,9 @@
 ## author: Piotr Stawarski <piotr.stawarski@zerodowntime.pl>
 ##
 
-FROM zerodowntime/centos:7
+ARG BASE_IMAGE="centos:7"
+
+FROM $BASE_IMAGE
 
 ARG KUBECTL_VERSION="latest"
 
